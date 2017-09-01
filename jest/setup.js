@@ -42,10 +42,10 @@ jest
   .mock('TextInput', () => mockComponent('TextInput'))
   .mock('Modal', () => mockComponent('Modal'))
   .mock('View', () => mockComponent('View', MockNativeMethods))
-  .mock('RefreshControl', () => require.requireMock('RefreshControlMock'))
-  .mock('ScrollView', () => require.requireMock('ScrollViewMock'))
+  .mock('RefreshControl', () => require.requireMock('../Libraries/Components/RefreshControl/__mocks__/RefreshControlMock'))
+  .mock('ScrollView', () => require.requireMock('../Libraries/Components/ScrollView/__mocks__/ScrollViewMock'))
   .mock('ActivityIndicator', () => mockComponent('ActivityIndicator'))
-  .mock('ListView', () => require.requireMock('ListViewMock'))
+  .mock('ListView', () => require.requireMock('../Libraries/Lists/ListView/__mocks__/ListViewMock'))
   .mock('ListViewDataSource', () => {
     const DataSource = require.requireActual('ListViewDataSource');
     DataSource.prototype.toJSON = function() {
@@ -295,11 +295,22 @@ const mockNativeModules = {
   },
 };
 
-Object.keys(mockNativeModules).forEach(module => {
+const mockNativeModuleJS = {
+  '../Libraries/AppState/AppState': mockNativeModules.AppState,
+  '../Libraries/Components/Clipboard/Clipboard': mockNativeModules.Clipboard,
+  '../Libraries/Utilities/DeviceInfo': mockNativeModules.DeviceInfo,
+  '../Libraries/Linking/Linking': mockNativeModules.Linking,
+  '../Libraries/Network/NetInfo': mockNativeModules.NetInfo,
+  '../Libraries/ReactNative/UIManager': mockNativeModules.UIManager,
+};
+
+const allRNMocks = {...mockNativeModules, ...mockNativeModuleJS};
+
+Object.keys(allRNMocks).forEach(module => {
   try {
-    jest.doMock(module, () => mockNativeModules[module]); // needed by FacebookSDK-test
+    jest.doMock(module, () => allRNMocks[module]); // needed by FacebookSDK-test
   } catch (e) {
-    jest.doMock(module, () => mockNativeModules[module], {virtual: true});
+    jest.doMock(module, () => allRNMocks[module], {virtual: true});
   }
 });
 
