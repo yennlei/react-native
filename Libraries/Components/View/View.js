@@ -52,4 +52,12 @@ if (__DEV__) {
   }
 }
 
+Object.defineProperty(ViewToExport, 'propTypes', {
+  configurable: true,
+  enumerable: true,
+  get() {
+    return require('ViewPropTypes');
+  },
+});
+
 module.exports = ((ViewToExport: $FlowFixMe): typeof ViewNativeComponent);
