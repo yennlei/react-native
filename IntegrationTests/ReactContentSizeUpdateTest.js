@@ -12,8 +12,8 @@
 const React = require('react');
 const createReactClass = require('create-react-class');
 const ReactNative = require('react-native');
-const RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
-const Subscribable = require('Subscribable');
+const RCTNativeAppEventEmitter = require('../Libraries/EventEmitter/RCTNativeAppEventEmitter');
+const Subscribable = require('../Libraries/Components/Subscribable');
 const TimerMixin = require('react-timer-mixin');
 
 const {View} = ReactNative;

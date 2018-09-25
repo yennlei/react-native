@@ -16,13 +16,13 @@ const ReactNative = require('react-native');
 const {Image, LayoutAnimation, StyleSheet, Text, View} = ReactNative;
 const {TestModule} = ReactNative.NativeModules;
 
-const deepDiffer = require('deepDiffer');
+const deepDiffer = require('../Libraries/Utilities/differ/deepDiffer');
 
 function debug(...args) {
   // console.log.apply(null, arguments);
 }
 
-import type {Layout, LayoutEvent} from 'CoreEventTypes';
+import type {Layout, LayoutEvent} from '../Libraries/Types/CoreEventTypes';
 type Style = {
   margin?: number,
   padding?: number,

@@ -14,7 +14,7 @@ var React = require('react');
 var ReactNative = require('react-native');
 var {StyleSheet, Text, TouchableHighlight, View, WebView} = ReactNative;
 
-var RCTNetworking = require('RCTNetworking');
+var RCTNetworking = require('../../Libraries/Network/RCTNetworking');
 
 class XHRExampleCookies extends React.Component<any, any> {
   cancelled: boolean;

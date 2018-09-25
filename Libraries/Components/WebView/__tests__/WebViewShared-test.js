@@ -10,7 +10,7 @@
 
 'use strict';
 
-const WebViewShared = require('WebViewShared');
+const WebViewShared = require('../WebViewShared');
 
 describe('WebViewShared', () => {
   it('extracts the origin correctly', () => {

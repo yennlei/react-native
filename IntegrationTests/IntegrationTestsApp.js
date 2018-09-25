@@ -46,7 +46,7 @@ TESTS.forEach(
 );
 
 // Modules required for integration tests
-require('LoggingTestModule');
+require('../IntegrationTests/LoggingTestModule');
 
 type Test = any;
 

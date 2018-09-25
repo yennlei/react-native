@@ -15,7 +15,7 @@ const ReactNative = require('react-native');
 const {AsyncStorage, Text, View} = ReactNative;
 const {TestModule} = ReactNative.NativeModules;
 
-const deepDiffer = require('deepDiffer');
+const deepDiffer = require('../Libraries/Utilities/differ/deepDiffer');
 
 const DEBUG = false;
 

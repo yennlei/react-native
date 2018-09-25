@@ -11,7 +11,7 @@
 
 const React = require('react');
 
-const requireNativeComponent = require('requireNativeComponent');
+const requireNativeComponent = require('../../ReactNative/requireNativeComponent');
 
 const RCTWKWebView = requireNativeComponent('RCTWKWebView');
 
