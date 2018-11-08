@@ -1,6 +1,6 @@
 {
   "name": "react-native",
-  "version": "0.57.4",
+  "version": "0.57.4-hooks.0",
   "description": "A framework for building native apps using React",
   "license": "MIT",
   "repository": {
@@ -145,7 +145,7 @@
     "react-native": "local-cli/wrong-react-native.js"
   },
   "peerDependencies": {
-    "react": "16.6.0-alpha.8af6728"
+    "react": "16.7.0-alpha.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
