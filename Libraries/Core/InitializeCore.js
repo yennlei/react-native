@@ -219,4 +219,16 @@ if (__DEV__) {
      * delete this comment and run Flow. */
     JSInspector.registerAgent(require('NetworkAgent'));
   }
+  const postMessage = global.postMessage;
+  // Update `postMessage` method signature to prevent errors caused by `window.postMessage`
+  // calls in `scheduler.development.js` which use two parameters, not the single parameter
+  // expected by React Native
+  global.postMessage = (message, targetOrigin) => {
+    // Skip string messages as the native code can't cope with them
+    // Fixes debug issues with the React Hooks Alpha caused by `window.postMessage`
+    // calls in `scheduler.development.js`
+    if (typeof message !== 'string') {
+      postMessage(message);
+    }
+  };
 }
