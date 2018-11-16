@@ -416,6 +416,24 @@ NSDictionary<NSString *, id> *RCTJSErrorFromNSError(NSError *error)
                                              error);
 }
 
+NSDictionary<NSString *, id> *RCTPlatformErrorFromNSError(NSError *error)
+{
+  NSMutableDictionary<NSString *, id> *platformError = [[NSMutableDictionary alloc] init];
+  platformError[@"domain"] = RCTNullIfNil(error.domain);
+  platformError[@"message"] = RCTNullIfNil(error.localizedDescription);
+  platformError[@"code"] = @(error.code);
+  if (error.userInfo) {
+    NSMutableDictionary *userInfo = [error.userInfo mutableCopy];
+    if (userInfo != nil && userInfo[NSUnderlyingErrorKey] != nil) {
+      NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
+      [userInfo removeObjectForKey:NSUnderlyingErrorKey];
+      platformError[@"cause"] = RCTPlatformErrorFromNSError(underlyingError);
+    }
+    platformError[@"userInfo"] = userInfo;
+  }
+  return platformError;
+}
+
 // TODO: Can we just replace RCTMakeError with this function instead?
 NSDictionary<NSString *, id> *RCTJSErrorFromCodeMessageAndNSError(NSString *code,
                                                                   NSString *message,
@@ -423,31 +441,19 @@ NSDictionary<NSString *, id> *RCTJSErrorFromCodeMessageAndNSError(NSString *code
 {
   NSString *errorMessage;
   NSArray<NSString *> *stackTrace = [NSThread callStackSymbols];
-  NSMutableDictionary *userInfo;
-  NSMutableDictionary<NSString *, id> *errorInfo =
-  [NSMutableDictionary dictionaryWithObject:stackTrace forKey:@"nativeStackIOS"];
-
+  NSMutableDictionary<NSString *, id> *platformError =
+    [NSMutableDictionary dictionaryWithObject:stackTrace forKey:@"stack"];
   if (error) {
-    errorMessage = error.localizedDescription ?: @"Unknown error from a native module";
-    errorInfo[@"domain"] = error.domain ?: RCTErrorDomain;
-    if (error.userInfo) {
-      userInfo = [error.userInfo mutableCopy];
-      if (userInfo != nil && userInfo[NSUnderlyingErrorKey] != nil) {
-        NSError *underlyingError = error.userInfo[NSUnderlyingErrorKey];
-        NSString *underlyingCode = [NSString stringWithFormat:@"%d", (int)underlyingError.code];
-        userInfo[NSUnderlyingErrorKey] = RCTJSErrorFromCodeMessageAndNSError(underlyingCode, @"underlying error", underlyingError);
-      }
-    }
-  } else {
-    errorMessage = @"Unknown error from a native module";
-    errorInfo[@"domain"] = RCTErrorDomain;
-    userInfo = nil;
+    [platformError addEntriesFromDictionary:RCTPlatformErrorFromNSError(error)];
   }
-  errorInfo[@"code"] = code ?: RCTErrorUnspecified;
-  errorInfo[@"userInfo"] = RCTNullIfNil(userInfo);
 
   // Allow for explicit overriding of the error message
-  errorMessage = message ?: errorMessage;
+  errorMessage = message ?: (platformError[@"message"] ?: @"Unknown error from a native module");
+
+  NSDictionary *errorInfo = @{
+                              @"code": code ?: RCTErrorUnspecified,
+                              @"platformError": platformError
+                              };
 
   return RCTMakeError(errorMessage, nil, errorInfo);
 }

@@ -303,6 +303,7 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
     api "com.squareup.okhttp3:okhttp-urlconnection:${OKHTTP_VERSION}"
     api 'com.squareup.okio:okio:1.14.0'
+    api project(':expo-errors')
     compile 'org.webkit:android-jsc:r174650'
 
     testImplementation "junit:junit:${JUNIT_VERSION}"
@@ -319,3 +320,4 @@ dependencies {
 }
 
 apply from: 'release.gradle'
+apply from: 'expolib-build.gradle'
